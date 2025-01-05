@@ -9,6 +9,6 @@ namespace EntityLayer
     public class Login
     {
         public int Id { get; set; }
-        public int Identity { get; set; }
+        public string Identity { get; set; }
     }
 }
