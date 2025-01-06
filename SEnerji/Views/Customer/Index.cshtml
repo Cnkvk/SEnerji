@@ -209,7 +209,7 @@
                                                     <input type="text" class="form-control" id="Surname">
                                                 </div>
                                                 <div class="mb-10 mt-10 form-group">
-                                                    <select class="js-example-basic-single" id="City" name="City">
+                                                    <select class="js-example-basic-single"  name="City">
                                                         <option value="">Seçiniz...</option>
                                                         <option value="34">İstanbul</option>
                                                         <option value="6">Ankara</option>
@@ -343,9 +343,9 @@
 
 
 
-<script>
+    <script>
 
-  $(document).ready(function () {
+    $(document).ready(function () {
         $('#kt_ecommerce_products_table').DataTable({
             language: {
                 "sDecimal": ",",
@@ -379,11 +379,14 @@
             }
         });
         $(".js-example-basic-single").select2();
+
+
+
         $("#kt_datepicker_1").flatpickr({
             enableTime: true,
             dateFormat: "Y-m-d H:i",
         });
-        
+
 
     });
 
@@ -416,7 +419,7 @@
                 // Eğer Select2'yi AJAX ile güncellediyseniz, Select2'yi yeniden başlatın
                 $(".js-example-basic-single").select2(); // Bu satır, Select2'yi tekrar başlatacaktır
             },
-           
+
         });
     }
 
@@ -501,63 +504,57 @@
         });
     }
 
-    function UpdateStock(id) {
-
-        var stock = {
-           
-            ProductName: $('#productSelect option:selected').text(),
-            Amount: parseInt($('#Amount').val()),
-            SellPrice: parseFloat($('#SellPrice').val()),
-            BuyPrice: parseFloat($('#BuyPrice').val()),
-            EntryTime: $('#EntryTime').val(),
-            StockId: id,
-            EndTime: $('#EndTime').val()
+    function UpdateCustomer(Id) {
+             var selectedText = $(".js-example-basic-single option:selected").text();
+             var cleanedText = selectedText.replace("Seçiniz...", "").trim();
+        var customerData = {
+            Id: Id, // Güncellenen müşterinin kimliği
+            Name: $("#Name").val().toUpperCase(),
+            Surname: $("#Surname").val().toUpperCase(),
+            City: cleanedText,
+            Identity: $("#Identity").val(), // Kimlik bilgisi
+            Plate: $("#Plate").val().toUpperCase(),
+            Email: $("#Email").val(),
+            Birthday: $("#kt_datepicker_1").val()
+                ? new Date($("#kt_datepicker_1").val()).toISOString()
+                : null // Tarih formatı
         };
 
         Swal.fire({
             title: 'Onaylıyor musunuz?',
-            text: "Bu ürünü Güncellemek istediğinizden emin misiniz?",
+            text: "Müşteri Bilgilerini Güncellemek istediğinizden emin misiniz?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Evet, kaydet!',
             cancelButtonText: 'Hayır, iptal et!'
         }).then((result) => {
             if (result.isConfirmed) {
-
                 $.ajax({
-                    url: '/Stock/UpdateStock',
+                    url: '/Customer/UpdateCustomer',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify(stock),
+                    data: JSON.stringify(customerData),
                     success: function (response) {
                         Swal.fire(
                             'Güncellendi!',
-                            'Ürün başarıyla Güncellendi.',
+                            'Müşteri başarıyla güncellendi.',
                             'success'
                         ).then(() => {
                             $("#kt_ecommerce_products_table").html(response);
-
-
+                            window.location.href = 'https://localhost:7196/Customer';
                         });
-
                     },
                     error: function (xhr) {
                         Swal.fire(
                             'Hata!',
-                            'Bir hata oluştu: ',
+                            'Bir hata oluştu.',
                             'error'
                         );
                     }
                 });
             }
         });
-
     }
-
-
-
-
-
 
 
 </script>
