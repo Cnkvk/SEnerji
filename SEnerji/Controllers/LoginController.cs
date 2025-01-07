@@ -8,5 +8,10 @@ namespace SEnerji.Controllers
         {
             return View();
         }
-    }
+       public IActionResult SignUp()
+            {
+                return View();
+            }
+        }
+    
 }
