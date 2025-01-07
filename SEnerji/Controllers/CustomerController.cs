@@ -75,8 +75,6 @@ namespace SEnerji.Controllers
             Ucustomer.City = string.IsNullOrWhiteSpace(customer.City) ? Ucustomer.City : customer.City;
             Ucustomer.Birthday = customer.Birthday == default ? Ucustomer.Birthday : customer.Birthday;
             Ucustomer.Plate = string.IsNullOrWhiteSpace(customer.Plate) ? Ucustomer.Plate : customer.Plate;
-
-            // Diğer durumlar
             Ucustomer.Status = 1;
 
             _context.customers.Update(Ucustomer);
