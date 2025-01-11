@@ -160,7 +160,7 @@
                 <!--end::Radio button-->
             </div>
             <div class="input-group mb-5">
-                    <input type="text" class="form-control" id="vehicleKw" placeholder="Recipient's username" aria-label="Araç Kw Değeri Giriniz" aria-describedby="basic-addon2" />
+                    <input type="text" class="form-control" id="vehicleKw" placeholder="Araç Kw Değeri Giriniz" aria-label="Araç Kw Değeri Giriniz" aria-describedby="basic-addon2" />
                 <span class="input-group-text" id="basic-addon2">
                     <i class="fa-solid fa-bolt" style="color: #ff0000;"><span class="path1"></span><span class="path2"></span></i>
                 </span>
@@ -230,6 +230,6 @@
             var chargeTime = ((vehicleKw*(max - min)) / selectedKw);
 
             // Sonucu ekranda göster
-            document.getElementById('chargeTimeResult').textContent = chargeTime.toFixed(2) + " dakika"; // 2 ondalıklı göster
+            document.getElementById('chargeTimeResult').textContent = chargeTime.toFixed(2) +""; // 2 ondalıklı göster
         });
     </script>
