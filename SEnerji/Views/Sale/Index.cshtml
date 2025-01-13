@@ -1,0 +1,460 @@
+﻿@using EntityLayer;
+@* @model List<Sale> *@
+
+<!--begin::Main-->
+<div class="app-main flex-column flex-row-fluid " id="kt_app_main">
+    <!--begin::Content wrapper-->
+    <div class="d-flex flex-column flex-column-fluid">
+
+        <!--begin::Toolbar-->
+        <div id="kt_app_toolbar" class="app-toolbar  py-3 py-lg-6 ">
+
+            <!--begin::Toolbar container-->
+            <div id="kt_app_toolbar_container" class="app-container  container-xxl d-flex flex-stack ">
+
+
+
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3 ">
+                    <!--begin::Title-->
+                    <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
+                        Personel İşlemleri
+                    </h1>
+                    <!--end::Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">
+                            <a href="/Home" class="text-muted text-hover-primary">
+                                Anasayfa
+                            </a>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">
+                            Personel İşlemleri
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <!--end::Item-->
+
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+                <!--begin::Actions-->
+                <div class="d-flex align-items-center gap-2 gap-lg-3">
+                    <!--begin::Filter menu-->
+                    <div class="m-0">
+                        <!--begin::Menu toggle-->
+                        <!--end::Menu toggle-->
+                        <!--begin::Menu 1-->
+                        <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_66a7735de56a9">
+                        </div>
+                        <!--end::Menu 1-->
+                    </div>
+                    <!--end::Filter menu-->
+                    <!--begin::Secondary button-->
+                    <!--end::Secondary button-->
+                    <!--begin::Primary button-->
+                    <!--end::Primary button-->
+                </div>
+                <!--end::Actions-->
+            </div>
+            <!--end::Toolbar container-->
+        </div>
+        <!--end::Toolbar-->
+        <!--begin::Content-->
+        <div id="kt_app_content" class="app-content  flex-column-fluid ">
+
+
+            <!--begin::Content container-->
+            <div id="kt_app_content_container" class="app-container  container-xxl ">
+                <!--begin::Products-->
+                <div class="card card-flush">
+                    <!--begin::Card header-->
+                    <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+                        <!--begin::Card title-->
+                        <div class="card-title">
+                            <!--begin::Search-->
+                            <div class="d-flex align-items-center position-relative my-1">
+                                <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-4"><span class="path1"></span><span class="path2"></span></i>
+                                <input type="text" data-kt-ecommerce-product-filter="search" class="form-control form-control-solid w-250px ps-12" placeholder="Müşteri Ara">
+                            </div>
+                            <!--end::Search-->
+                        </div>
+                        <!--end::Card title-->
+                        <!--begin::Card toolbar-->
+                        <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+                            <div class="w-100 mw-150px">
+                                <!--begin::Select2-->
+                                <!--end::Select2-->
+                            </div>
+
+                            <!--begin::Add product-->
+
+
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_1">
+                                Personel Ekle
+                            </button>
+
+
+
+                            <!--end::Add product-->
+                        </div>
+                        <!--end::Card toolbar-->
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+                    <div class="card-body pt-0">
+
+                        <!--begin::Table-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_products_table">
+                            <thead>
+                                <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+
+                                    <th>Plaka</th>
+                                    <th>Tc</th>
+                                    <th>Fiyat</th>
+                                    <th>TC</th>
+                                    <th>Maaş</th>
+                                    <th>Email</th>
+                                    <th>Password</th>
+                                    <th>Düzenle</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fw-semibold text-gray-600">
+                                @* @foreach (var item in Model)
+                                { *@
+                                <tr>
+
+                                    <td>
+                                        <div class="d-flex align-items-center">
+
+                                            <div class="ms-5">
+                                                <!--begin::Title-->
+                                                <a href="#" class="text-gray-800 text-hover-primary fs-5 fw-bold" data-kt-ecommerce-product-filter="product_name">@* @item.SocketType * *@</a>
+                                                <!--end::Title-->
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-left pe-0">
+                                        <span class="fw-bold">@* @item.SocketType *@</span>
+
+                                    </td>
+                                    <td class="text-left pe-0" data-order="14">
+                                        <span class="fw-bold ms-3">@* @item.SalesQty *@</span>
+                                    </td>
+                                    <td class="text-left pe-0">@* @item.Id *@</td>
+                                    <td class="text-left pe-0">@* @item.Price *@</td>
+                                    <td class="text-left pe-0">@* @item.SalesDate *@</td>
+                                    <td class="text-left pe-0">@* @item.CustomerId *@</td>
+
+
+
+                                    <td class="text-right">
+                                        <a href="#" onclick="openUpdateModal()" class="btn btn-sm btn-light btn-flex btn-center btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                            Düzenle
+                                            <i class="ki-duotone ki-down fs-5 ms-1"></i>
+                                        </a>
+                                        <!--begin::Menu-->
+                                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
+                                            <!--begin::Menu item-->
+                                            <div class="menu-item px-3">
+                                                <a href="#" class="menu-link px-3" data-bs-toggle="modal" @* onclick="openUpdateModal(/* @item.Id */)" *@ data-bs-target="#kt_modal_1">
+                                                    Güncelle
+                                                </a>
+
+                                            </div>
+                                            <!--begin::Menu item-->
+                                            <div class="menu-item px-3">
+                                                <a href="#" @* onclick="RemovePersonel(/* @item.Id */)" *@ class="menu-link px-3" data-kt-ecommerce-product-filter="delete_row">
+                                                    Sil
+                                                </a>
+                                            </div>
+                                            <!--end::Menu item-->
+                                        </div>
+                                        <!--end::Menu-->
+                                    </td>
+                                </tr>
+
+
+                                <div class="modal fade" tabindex="-1" id="kt_modal_1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title">Modal title</h3>
+
+                                                <!--begin::Close-->
+                                                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                                                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                                                </div>
+                                                <!--end::Close-->
+                                            </div>
+
+                                            <div class="modal-body">
+
+                                                <div class="form-group">
+                                                    <label for="" class="form-label">TC:</label>
+                                                    <input type="text" class="form-control form-control-solid" placeholder="TC NO" id="Identity" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Plaka</label>
+                                                    <input type="text" class="form-control" id="Plate">
+                                                </div>
+                                                <div class="mb-10 mt-10 form-group">
+                                                    <select class="js-example-basic-single" name="SocketType">
+                                                        <option value="">Seçiniz...</option>
+                                                        <option value="2.7">EV</option>
+                                                        <option value="11">EV 2 </option>
+                                                        <option value="11">AC PRİZ</option>
+                                                        <option value="60">DC PRİZ</option>
+                                                        <option value="120">DC PRİZ YÜKSEK</option>
+                                                    </select>
+                                                </div>
+                                               
+                                              
+                                                
+                                             
+                                            </div>
+
+                                            <div class="modal-footer">
+
+                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Kapat</button>
+                                                <button type="button" class="btn btn-primary" onclick="AddSale()">Müşteri Ekle</button>
+                                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @* onclick="UpdatePersonel(/* @item.Id */)" *@>Güncelle</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*   } *@
+
+                            </tbody>
+                        </table>
+
+                        <!--end::Table-->
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Products-->
+            </div>
+            <!--end::Content container-->
+        </div>
+        <!--end::Content-->
+
+    </div>
+    <!--end::Content wrapper-->
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+        $('#kt_ecommerce_products_table').DataTable({
+            language: {
+                "sDecimal": ",",
+                "sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+                "sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+                "sInfoEmpty": "Kayıt yok",
+                "sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLoadingRecords": "Yükleniyor...",
+                "sProcessing": "İşleniyor...",
+                "sSearch": "Ara:",
+                "sZeroRecords": "Eşleşen kayıt bulunamadı",
+                "oPaginate": {
+                    "sFirst": "İlk",
+                    "sLast": "Son",
+                    "sNext": "Sonraki",
+                    "sPrevious": "Önceki"
+                },
+                "oAria": {
+                    "sSortAscending": ": artan sütun sıralamasını aktifleştir",
+                    "sSortDescending": ": azalan sütun sıralamasını aktifleştir"
+                },
+                "select": {
+                    "rows": {
+                        "_": "%d kayıt seçildi",
+                        "0": "",
+                        "1": "1 kayıt seçildi"
+                    }
+                }
+            }
+        });
+        $(".js-example-basic-single").select2();
+
+     
+
+
+    });
+
+    function openUpdateModal(Id) {
+        // Müşteri verilerini AJAX ile alıyoruz
+        $.ajax({
+            url: '/Sale/GetSaleById',  // API endpoint
+            type: 'GET',
+            data: { id: Id },  // Müşteri ID'sini gönderiyoruz
+            success: function (response) {
+                // Veriyi aldıktan sonra modalı dolduruyoruz
+                $('#Name').val(response.Name);
+                $('#Surname').val(response.Surname);
+                $('#Salary').val(response.Salary);
+                $('#Email').val(response.Email);
+                $('#Password').val(response.Password)
+
+
+
+
+                $('#Identity').val(response.Identity);
+
+                // Select2 ile City'yi doğru şekilde dolduruyoruz
+                $(".js-example-basic-single").val(response.City.id).trigger('change'); // ID'yi doğru şekilde gönderiyoruz
+
+                // Modalı açıyoruz
+                $('#kt_modal_1').modal('show');
+
+                // Eğer Select2'yi AJAX ile güncellediyseniz, Select2'yi yeniden başlatın
+                $(".js-example-basic-single").select2(); // Bu satır, Select2'yi tekrar başlatacaktır
+            },
+
+        });
+    }
+
+
+    function AddSale() {
+        // Formdaki verileri topluyoruz
+        var SaleData = {
+            Plate: $("#Plate").val().toUpperCase(),
+            SocketType: $(".js-example-basic-single option:selected").text(),
+            Identity: $("#Identity").val() 
+            
+
+        };
+
+
+        // AJAX çağrısını yapıyoruz
+        $.ajax({
+            url: "/Sale/AddSale", // Sunucu tarafındaki endpoint
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(SaleData),
+            success: function (response) {
+                // İşlem başarılıysa swal ile bildirim
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Başarılı!',
+                    text: 'Personel başarıyla eklendi.',
+                    confirmButtonText: 'Tamam'
+                }).then(() => {
+                    // Swal kapandıktan sonra yönlendirme yap
+                    window.location.href = 'https://localhost:7196/Sale';
+                });
+            },
+            error: function (xhr, status, error) {
+                // Hata durumunda swal ile uyarı
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Hata!',
+                    text: 'Müşteri eklenirken bir hata oluştu.',
+                    confirmButtonText: 'Tamam'
+                });
+                console.error(xhr.responseText);
+            }
+        });
+    }
+
+    function RemovePersonel(Id) {
+        Swal.fire({
+            title: 'Silmek istediğinize emin misiniz?',
+            text: "Bu işlem geri alınamaz!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Evet, sil!',
+            cancelButtonText: 'Hayır, iptal et!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/Personel/RemovePersonel?Id=${Id}`,
+                    type: 'GET',
+                    success: function (response) {
+                        Swal.fire(
+                            'Silindi!',
+                            'Müşteri başarıyla silindi.',
+                            'success'
+                        ).then(() => {
+
+                            location.reload();
+                        });
+                    },
+                    error: function (xhr) {
+                        Swal.fire(
+                            'Hata!',
+                            'Bir hata oluştu: ',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    }
+
+    function UpdatePersonel(Id) {
+        var selectedText = $(".js-example-basic-single option:selected").text();
+        var cleanedText = selectedText.replace("Seçiniz...", "").trim();
+        var personelData = {
+            Id: Id, // Güncellenen müşterinin kimliği
+            Name: $("#Name").val().toUpperCase(),
+            Surname: $("#Surname").val().toUpperCase(),
+            City: cleanedText,
+            Identity: $("#Identity").val(), // Kimlik bilgisi
+            Salary: $("#Salary").val(),
+            Email: $("#Email").val()
+        };
+
+        Swal.fire({
+            title: 'Onaylıyor musunuz?',
+            text: "Personel Bilgilerini Güncellemek istediğinizden emin misiniz?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Evet, kaydet!',
+            cancelButtonText: 'Hayır, iptal et!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/Personel/UpdatePersonel',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(personelData),
+                    success: function (response) {
+                        Swal.fire(
+                            'Güncellendi!',
+                            'Müşteri başarıyla güncellendi.',
+                            'success'
+                        ).then(() => {
+                            $("#kt_ecommerce_products_table").html(response);
+                            window.location.href = 'https://localhost:7196/Sale';
+                        });
+                    },
+                    error: function (xhr) {
+                        Swal.fire(
+                            'Hata!',
+                            'Bir hata oluştu.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    }
+
+
+</script>
+

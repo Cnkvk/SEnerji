@@ -170,8 +170,8 @@
                     <div id="kt_slider_basic"></div>
 
                     <div class="pt-5">
-                        <div class="fw-semibold mb-2">Min: <span id="kt_slider_basic_min"></span></div>
-                        <div class="fw-semibold mb-2">Max: <span id="kt_slider_basic_max"></span></div>
+                        <div class="fw-semibold mb-2">Şimdiki Yüzde: <span id="kt_slider_basic_min"></span></div>
+                        <div class="fw-semibold mb-2">Şarj Edilecek Yüzde: <span id="kt_slider_basic_max"></span></div>
                     </div>
                 </div>
             <div class="mb-0">
@@ -180,7 +180,7 @@
 
             <!-- Sonuç -->
             <div class="mt-3">
-                <h4>Şarj Süresi: <span id="chargeTimeResult">--</span> dakika</h4>
+                <h4>Şarj Süresi: <span id="chargeTimeResult">--</span></h4>
             </div>
             <!--end::Card body-->
             </form>
@@ -229,7 +229,13 @@
             // Hesaplama: AraçKw * (Slider Max - Slider Min) * Seçilen KW
             var chargeTime = ((vehicleKw*(max - min)) / selectedKw);
 
-            // Sonucu ekranda göster
-            document.getElementById('chargeTimeResult').textContent = chargeTime.toFixed(2) +""; // 2 ondalıklı göster
+            
+
+            // Saat ve dakika olarak dönüştürme
+            let hours = Math.floor(chargeTime / 60); // Saat kısmı
+            let minutes = chargeTime % 60; // Dakika kısmı
+            let minutesFormatted = minutes.toFixed(0);
+            // Sonucu formatla ve görüntüle
+            document.getElementById('chargeTimeResult').textContent = hours + " saat " + minutesFormatted + " dakika"; // 2 ondalıklı göster
         });
     </script>

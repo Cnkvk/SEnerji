@@ -9,10 +9,21 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull; // Null alanlarý destekle
 });
 
-// Add services to the container.
+
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin()  // Tüm origin'lere izin ver
+            .AllowAnyMethod()    // Tüm HTTP metodlarýna izin ver
+            .AllowAnyHeader();   // Tüm baþlýklara izin ver
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,6 +40,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseCors("AllowAllOrigins");
 
 app.MapControllerRoute(
     name: "default",
