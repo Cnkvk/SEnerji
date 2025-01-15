@@ -17,5 +17,6 @@ namespace EntityLayer
         public string? Email { get; set; }
         public DateTime? Birthday { get; set; }
         public int Status { get; set; }
+        public ICollection<Sale> Sales { get; set; }
     }
 }

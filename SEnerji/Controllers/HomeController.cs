@@ -1,7 +1,11 @@
 ﻿using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SEnerji.Models;
 using System.Diagnostics;
+using System.IO.Compression;
+using System.Net;
+using static System.Net.WebRequestMethods;
 
 namespace SEnerji.Controllers
 {
@@ -14,37 +18,114 @@ namespace SEnerji.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> IndexAsync()
+        private static readonly string ApiUrl = "https://api.openchargemap.io/v3/poi";
+        private static readonly string ApiKey = "1cff6936-69cb-4e68-80df-d479970e9251"; // API Anahtarınız
+
+        private static readonly string CountryCode = "TR"; // Türkiye'nin ülke kodu
+        private static readonly int MaxResults = 10; // İstediğiniz sayıda şarj istasyonu (isteğe bağlı)
+
+        public async Task<IActionResult> Index()
         {
-            var url = "https://esarj.com/harita"; // Harita sayfasının URL'si
-            var httpClient = new HttpClient();
-
-            // User-Agent ekleyerek istek yapalım
-            httpClient.DefaultRequestHeaders.Add("User-Agent",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
-
             try
             {
-                var html = await httpClient.GetStringAsync(url);
+                using (HttpClient client = new HttpClient())
+                {
+                    // API'ye gerekli parametrelerle istek gönderiyoruz
+                    string url = $"{ApiUrl}?countrycode={CountryCode}&maxresults={MaxResults}&key={ApiKey}";
 
-                HtmlDocument document = new HtmlDocument();
-                document.LoadHtml(html);
+                    // API'den veri alıyoruz
+                    var response = await client.GetStringAsync(url);
 
-                var iframeNode = document.DocumentNode.SelectSingleNode("//iframe");
-                var iframeSrc = iframeNode?.GetAttributeValue("src", string.Empty);
+                    // JSON verisini deserialize ediyoruz
+                    var chargingStationsResponse = JsonConvert.DeserializeObject<List<ChargingStationResponse>>(response);
 
-                ViewBag.MapUrl = iframeSrc;
+                    // Yalnızca AddressInfo ve Level bilgilerini alıp dönüştürüyoruz
+                    var chargingStations = new List<ChargingStation>();
+
+                    foreach (var station in chargingStationsResponse)
+                    {
+                        var chargingStation = new ChargingStation
+                        {
+                            Title = station.AddressInfo.Title,
+                            AddressLine1 = station.AddressInfo.AddressLine1,
+                            AddressLine2 = station.AddressInfo.AddressLine2,
+                            Town = station.AddressInfo.Town,
+                            StateOrProvince = station.AddressInfo.StateOrProvince,
+                            Postcode = station.AddressInfo.Postcode,
+                            Latitude = station.AddressInfo.Latitude,
+                            Longitude = station.AddressInfo.Longitude,
+                            LevelTitle = station.Connections.FirstOrDefault()?.Level.Title ?? "N/A",
+                            LevelComments = station.Connections.FirstOrDefault()?.Level.Comments ?? "N/A",
+                            IsFastChargeCapable = station.Connections.FirstOrDefault()?.Level.IsFastChargeCapable ?? false
+                        };
+
+                        chargingStations.Add(chargingStation);
+                    }
+
+                    // Şarj istasyonlarını View'a gönderiyoruz
+                    return View(chargingStations);
+                }
             }
-            catch (HttpRequestException ex)
+            catch (System.Exception ex)
             {
-                ViewBag.ErrorMessage = "Erişim engellendi: " + ex.Message;
+                // Hata durumunda kullanıcıyı bilgilendiriyoruz
+                ViewData["ErrorMessage"] = "API'den veri alınırken bir hata oluştu: " + ex.Message;
+                return View();
             }
-
-            return View();
         }
-       
 
-        public IActionResult Privacy()
+
+        public class ChargingStation
+    {
+        // AddressInfo kısmındaki veriler
+        public string Title { get; set; }
+        public string AddressLine1 { get; set; }
+        public string AddressLine2 { get; set; }
+        public string Town { get; set; }
+        public string StateOrProvince { get; set; }
+        public string Postcode { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+
+        // Level bilgileri
+        public string LevelTitle { get; set; }
+        public string LevelComments { get; set; }
+        public bool IsFastChargeCapable { get; set; }
+    }
+
+    public class ChargingStationResponse
+    {
+        public AddressInfo AddressInfo { get; set; }
+        public List<Connection> Connections { get; set; }
+    }
+
+    public class AddressInfo
+    {
+        public string Title { get; set; }
+        public string AddressLine1 { get; set; }
+        public string AddressLine2 { get; set; }
+        public string Town { get; set; }
+        public string StateOrProvince { get; set; }
+        public string Postcode { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
+
+    public class Connection
+    {
+        public Level Level { get; set; }
+    }
+
+    public class Level
+    {
+        public string Title { get; set; }
+        public string Comments { get; set; }
+        public bool IsFastChargeCapable { get; set; }
+    }
+
+
+
+    public IActionResult Privacy()
         {
             return View();
         }

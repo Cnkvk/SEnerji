@@ -1,2 +1,50 @@
-﻿
-<iframe width="1400" height="730" src="https://www.sarj.dev/" frameborder="0"></iframe>
+﻿@model List<SEnerji.Controllers.HomeController.ChargingStation>;
+
+@{
+    ViewData["Title"] = "Elektrikli Araç Şarj İstasyonları";
+}
+
+@{
+    ViewData["Title"] = "Elektrikli Araç Şarj İstasyonları";
+}
+
+
+<h1>@ViewData["Title"]</h1>
+
+@if (ViewData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @ViewData["ErrorMessage"]
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>İstasyon Adı</th>
+            <th>Adres</th>
+            <th>Şehir</th>
+            <th>İlçe / İl</th>
+            <th>Posta Kodu</th>
+            <th>Koordinatlar</th>
+            <th>Şarj Seviyesi</th>
+            <th>Hızlı Şarj Desteği</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var station in Model)
+        {
+            <tr>
+                <td>@station.Title</td>
+                <td>@station.AddressLine1 @station.AddressLine2</td>
+                <td>@station.Town</td>
+                <td>@station.StateOrProvince</td>
+                <td>@station.Postcode</td>
+                <td>@station.Latitude, @station.Longitude</td>
+                <td>@station.LevelTitle (@station.LevelComments)</td>
+                <td>@(station.IsFastChargeCapable ? "Evet" : "Hayır")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

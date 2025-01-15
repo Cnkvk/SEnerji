@@ -13,6 +13,8 @@ namespace EntityLayer
         public string? SalesQty { get; set; }
         public decimal? Price { get; set; }
         public DateTime? SalesDate { get; set; }
-        public int? CustomerId { get; set; }
+        public int CustomerId { get; set; }
+
+        public Customer Customer { get; set; }
     }
 }

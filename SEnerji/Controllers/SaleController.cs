@@ -11,10 +11,35 @@ namespace SEnerji.Controllers
         private readonly ApplicationDbContext _context = new();
         public IActionResult Index()
         {
-            return View();
+            var sales = _context.sales
+       .Join(
+           _context.customers,
+           sale => sale.CustomerId,
+           customer => customer.Id,
+           (sale, customer) => new SaleDTO
+           {
+               SocketType = sale.SocketType,
+               SalesQty = sale.SalesQty,
+               Price = sale.Price,
+               SalesDate = sale.SalesDate,
+               CustomerId = sale.CustomerId,
+               CustomerPlate = customer.Plate,
+               Identity = customer.Identity,
+               Status = customer.Status,
+               CustomerName = customer.Name,
+               CustomerSurname = customer.Surname// Customer tablosundaki Name alanı
+           }).ToList();
+            if (sales == null || !sales.Any())
+            {
+                // Boş liste durumu
+                return Content("No sales data found.");
+            }
+
+            return View(sales);
         }
         [HttpPost]
         public IActionResult AddSale([FromBody] SaleDTO saleDTO)
+
         {
             if (!ModelState.IsValid)
             {
@@ -30,13 +55,13 @@ namespace SEnerji.Controllers
             // Sale objesini oluştur
             var sale = new Sale()
             {
-                
+
                 SocketType = saleDTO.SocketType,
-                CustomerId = saleDTO.CustomerId,
+                CustomerId = customer.Id,
                 Price = saleDTO.Price,
                 SalesDate = saleDTO.SalesDate ?? DateTime.Now, // Null kontrolü ekledim
                 SalesQty = saleDTO.SalesQty
-                
+
             };
             _context.sales.Add(sale);
             _context.SaveChanges();
@@ -83,6 +108,29 @@ namespace SEnerji.Controllers
             _context.SaveChanges();
             return Json(new { success = true, message = "Satış başarıyla silindi." });
         }
+        [HttpGet]
+        public IActionResult GetSaleById(int CustomerId)
+        {
+            var sale = _context.sales
+         .Join(
+             _context.customers,
+             sale => sale.CustomerId,
+             customer => customer.Id,
+             (sale, customer) => new SaleDTO
+             {
+                 CustomerId = sale.CustomerId,
+                 CustomerPlate = customer.Plate,
+                 Identity = customer.Identity,
+                 SocketType = sale.SocketType // Eğer SocketType'ı da almak isterseniz
+             })
+         .FirstOrDefault(s => s.CustomerId == CustomerId);  // CustomerId'yi kullanarak filtreleme yapıyoruz
 
+            // Eğer satış bulunamazsa 404 döndürüyoruz
+           
+
+            // Satışı JSON olarak döndürüyoruz
+            return Json(sale);
+
+        }
     }
 }

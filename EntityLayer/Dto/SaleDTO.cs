@@ -14,7 +14,9 @@ namespace EntityLayer.Dto
         public decimal? Price { get; set; }
         public DateTime? SalesDate { get; set; } 
         public int CustomerId { get; set; }
-        public string? Plate { get; set; }
+        public string? CustomerName { get; set; }
+        public string? CustomerSurname { get; set; }
+        public string? CustomerPlate { get; set; }
         public string? Identity { get; set; }
         public int Status { get; set; }
     }
