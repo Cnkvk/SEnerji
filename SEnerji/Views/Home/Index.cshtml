@@ -1,15 +1,39 @@
 ﻿@model List<SEnerji.Controllers.HomeController.ChargingStation>;
 
-@{
-    ViewData["Title"] = "Elektrikli Araç Şarj İstasyonları";
-}
 
-@{
-    ViewData["Title"] = "Elektrikli Araç Şarj İstasyonları";
-}
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
 
+<style>
+    /* Harita container'ı */
+    #map {
+        height: 500px;
+        width: 100%;
+    }
 
-<h1>@ViewData["Title"]</h1>
+    /* Harita altındaki içerik */
+    #footer {
+        position: fixed;
+        bottom: 10px;
+        left: 60%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        color: white;
+        text-align: center;
+        font-family: 'Roboto', sans-serif;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+        #footer img {
+            width: 100px;
+            margin-bottom: 10px;
+        }
+
+        #footer h1 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+</style>
 
 @if (ViewData["ErrorMessage"] != null)
 {
@@ -18,33 +42,43 @@
     </div>
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>İstasyon Adı</th>
-            <th>Adres</th>
-            <th>Şehir</th>
-            <th>İlçe / İl</th>
-            <th>Posta Kodu</th>
-            <th>Koordinatlar</th>
-            <th>Şarj Seviyesi</th>
-            <th>Hızlı Şarj Desteği</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var station in Model)
-        {
-            <tr>
-                <td>@station.Title</td>
-                <td>@station.AddressLine1 @station.AddressLine2</td>
-                <td>@station.Town</td>
-                <td>@station.StateOrProvince</td>
-                <td>@station.Postcode</td>
-                <td>@station.Latitude, @station.Longitude</td>
-                <td>@station.LevelTitle (@station.LevelComments)</td>
-                <td>@(station.IsFastChargeCapable ? "Evet" : "Hayır")</td>
-            </tr>
-        }
-    </tbody>
-</table>
 
+<div id="dvMap" style="height: 500px;"></div>
+<div id="footer">
+    <img src="~/Resimler/EsarjLogo.png" alt="Logo"> <!-- Burada logo path'i doğru olmalı -->
+    <h1>Şarj İstasyonları Listesi</h1>
+</div>
+
+<!-- Leaflet.js kütüphanesini ve harita stilini dahil ediyoruz -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script type="text/javascript">
+    window.onload = function () {
+        // Model'den gelen marker verisini alıyoruz (ViewData'dan)
+        var markers = @Html.Raw(ViewData["Markers"]);
+
+        // Harita başlatma
+        var map = L.map('dvMap').setView([markers[0].Latitude, markers[0].Longitude], 6);
+
+        // OpenStreetMap tile'larını ekliyoruz
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Model'den gelen her bir şarj istasyonunu haritada işaretliyoruz
+        var myIcon = L.icon({
+            iconUrl: '@Url.Content("~/Resimler/EsarjLogo.png")',  // İkonun URL'sini burada belirtin
+            iconSize: [64, 64],  // İkonun boyutları
+            iconAnchor: [16, 32],  // İkonun referans noktası
+            popupAnchor: [0, -32]  // Popup pozisyonu
+        });
+
+        // Model'den gelen her bir şarj istasyonunu haritada işaretliyoruz
+        markers.forEach(function (item) {
+            L.marker([item.Latitude, item.Longitude], { icon: myIcon })  // Özel ikonu marker'a ekliyoruz
+                .bindPopup("<b>" + item.Title + "</b><br />" + item.AddressLine1 + " " + item.AddressLine2 + ", " + item.Town + ", " + item.StateOrProvince)
+                .addTo(map);
+        });
+    };
+</script>

@@ -22,7 +22,7 @@ namespace SEnerji.Controllers
         private static readonly string ApiKey = "1cff6936-69cb-4e68-80df-d479970e9251"; // API Anahtarınız
 
         private static readonly string CountryCode = "TR"; // Türkiye'nin ülke kodu
-        private static readonly int MaxResults = 10; // İstediğiniz sayıda şarj istasyonu (isteğe bağlı)
+        private static readonly int MaxResults = 200; // İstediğiniz sayıda şarj istasyonu (isteğe bağlı)
 
         public async Task<IActionResult> Index()
         {
@@ -61,9 +61,9 @@ namespace SEnerji.Controllers
 
                         chargingStations.Add(chargingStation);
                     }
-
+                    ViewData["Markers"] = JsonConvert.SerializeObject(chargingStations);
                     // Şarj istasyonlarını View'a gönderiyoruz
-                    return View(chargingStations);
+                    return View();
                 }
             }
             catch (System.Exception ex)
