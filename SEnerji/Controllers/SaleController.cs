@@ -132,37 +132,11 @@ namespace SEnerji.Controllers
             return Json(sale);
 
         }
-        // GET: Customer/SalePage/5
-        public IActionResult SalePage(int id)
-        {
-            var customer = _context.customers
-                .Where(c => c.Id == id)
-                .Select(c => new Customer
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Surname = c.Surname,
-                    City = c.City,
-                    Identity = c.Identity,
-                    Plate = c.Plate,
-                    Email = c.Email,
-                    Birthday = c.Birthday,
-                    Status = c.Status
-                })
-                .FirstOrDefault();
 
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            return View(customer);
+        public IActionResult SalePage() {
+            return View();
         }
+
     }
-
-
-
-
-
 }
 
