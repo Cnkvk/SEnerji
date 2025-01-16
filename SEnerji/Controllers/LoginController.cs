@@ -9,7 +9,7 @@ namespace SEnerji.Controllers
     public class LoginController : Controller
     {
         private readonly ApplicationDbContext _context = new();
-        [HttpPost]
+        
         public IActionResult Index()
         {
             return View();
