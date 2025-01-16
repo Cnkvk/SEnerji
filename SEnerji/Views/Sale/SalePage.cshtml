@@ -1,26 +1,67 @@
-﻿
-<h1>Satış Sayfası</h1>
+﻿@using EntityLayer.Dto;
 
-<div>
-    <h2>Müşteri Bilgileri</h2>
-    <p><strong>Ad:</strong> @Model.Name</p>
-    <p><strong>Soyad:</strong> @Model.Surname</p>
-    <p><strong>Şehir:</strong> @Model.City</p>
-    <p><strong>Kimlik:</strong> @Model.Identity</p>
-    <p><strong>Plaka:</strong> @Model.Plate</p>
-    <p><strong>E-posta:</strong> @Model.Email</p>
-    <p><strong>Doğum Günü:</strong> @Model.Birthday?.ToString("yyyy-MM-dd")</p>
-    <p><strong>Durum:</strong> @Model.Status</p>
-</div>
+<!--begin::Satış Ekleme Görünümü-->
+<div class="card card-flush">
+    <!--begin::Card header-->
+    <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+        <!--begin::Card title-->
+        <div class="card-title">
+            <h3 class="text-gray-800 fw-bold">Satış Ekle</h3>
+        </div>
+        <!--end::Card title-->
+    </div>
+    <!--end::Card header-->
+    <!--begin::Card body-->
+    <div class="card-body pt-0">
+        <form id="AddSaleForm">
+            <div class="form-group mb-3">
+                <label for="Identity" class="form-label">TC:</label>
+                <input type="text" class="form-control form-control-solid" placeholder="TC NO" id="Identity" />
+            </div>
+            <div class="form-group mb-3">
+                <label for="Plate" class="col-form-label">Plaka:</label>
+                <input type="text" class="form-control" id="Plate" />
+            </div>
+            <div class="mb-10 mt-10 form-group">
+                <label for="SocketType" class="form-label">Soket Türü:</label>
+                <select class="js-example-basic-single form-control" name="SocketType" id="SocketType">
+                    <option value="">Seçiniz...</option>
+                    <option value="2.7">EV</option>
+                    <option value="11">EV 2</option>
+                    <option value="11">AC PRİZ</option>
+                    <option value="60">DC PRİZ</option>
+                    <option value="120">DC PRİZ YÜKSEK</option>
+                </select>
+            </div>
+            <div class="form-group mb-3">
+                <label for="Price" class="col-form-label">Fiyat:</label>
+                <input type="text" class="form-control" id="Price" placeholder="Fiyat bilgisi" readonly />
+            </div>
+     
 
-<div>
-    <h2>Satış Yap</h2>
-    <form method="post" action="/Sales/Create">
-        <input type="hidden" name="CustomerId" value="@Model.Id" />
-        <label for="Product">Ürün:</label>
-        <input type="text" id="Product" name="Product" required />
-        <label for="Amount">Miktar:</label>
-        <input type="number" id="Amount" name="Amount" required />
-        <button type="submit">Satış Yap</button>
-    </form>
+            <div class="form-group mb-3">
+                <label for="SalesDate" class="col-form-label">Tarih:</label>
+                <input type="datetime-local" class="form-control" id="SalesDate" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+            </div>
+            @* <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="AddSale()">Satış Başlat</button>
+            </div> *@
+            <div style="position: relative; display: inline-block;">
+                <!-- Araç Resmi -->
+                <img src="/Resimler/EsarjLogo.png" alt="Araba" style="width: 250px; height: 250px;">
+
+                <!-- Satış Başlat Butonu -->
+                <button type="button" class="btn btn-primary" onclick="AddSale()"
+                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+               background-color: transparent; border: none; color: rgba(255, 255, 255, 0.5); font-size: 16px;">
+                    Satış Başlat
+                </button>
+            </div>
+
+           
+
+        </form>
+    </div>
+    <!--end::Card body-->
 </div>
+<!--end::Satış Ekleme Görünümü-->
