@@ -1,28 +1,23 @@
 using DataBaseLayer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.PropertyNamingPolicy = null; // JSON PascalCase kabul etsin
-    options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull; // Null alanlarý destekle
-});
-
-
+// Add services to the container.
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAllOrigins", policy =>
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
     {
-        policy.AllowAnyOrigin()  // Tüm origin'lere izin ver
-            .AllowAnyMethod()    // Tüm HTTP metodlarýna izin ver
-            .AllowAnyHeader();   // Tüm baþlýklara izin ver
+        options.LoginPath = "/Login/Index"; // Giriþ yapýlmamýþsa yönlendirme yapýlacak sayfa
+        options.AccessDeniedPath = "/Home";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Çerez süresi
+        options.SlidingExpiration = true; // Kullaným süresine göre süreyi uzatma
     });
-});
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -39,11 +34,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("AllowAllOrigins");
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();

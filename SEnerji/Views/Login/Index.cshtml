@@ -95,7 +95,7 @@
                     <div class="w-lg-500px p-10">
 
                         <!--begin::Form-->
-                        <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="/metronic8/demo1/index.html" action="#">
+                        
                             <!--begin::Heading-->
                             <div class="text-center mb-11">
                                 <!--begin::Title-->
@@ -143,14 +143,14 @@
                             <!--begin::Input group--->
                             <div class="fv-row mb-8">
                                 <!--begin::Email-->
-                                <input type="text" placeholder="E posta" name="email" autocomplete="off" class="form-control bg-transparent">
+                                <input id="Identity" type="text" placeholder="Tc Kimlik"  autocomplete="off" class="form-control bg-transparent">
                                 <!--end::Email-->
                             </div>
 
                             <!--end::Input group--->
                             <div class="fv-row mb-3">
                                 <!--begin::Password-->
-                                <input type="password" placeholder="Şifre" name="password" autocomplete="off" class="form-control bg-transparent">
+                            <input id="Password" type="text" placeholder="Parola" name="Password" autocomplete="off" class="form-control bg-transparent">
                                 <!--end::Password-->
                             </div>
                             <!--end::Input group--->
@@ -167,7 +167,7 @@
                             <!--end::Wrapper-->
                             <!--begin::Submit button-->
                             <div class="d-grid mb-10">
-                                <button type="submit" id="kt_sign_in_submit" class="btn btn-primary">
+                            <button  id="SignIn" class="btn btn-primary">
 
                                     <!--begin::Indicator label-->
                                     <span class="indicator-label">
@@ -190,7 +190,7 @@
                                     Üye Ol
                             </div>
                             <!--end::Sign up-->
-                        </form>
+                        
                         <!--end::Form-->
                     </div>
                     <!--end::Wrapper-->
@@ -299,15 +299,55 @@
     </div>
     <!--end::Root-->
     <!--begin::Javascript-->
-    <script>
-        var hostUrl = "/metronic8/demo1/assets/";        </script>
-
+   
     <!--begin::Global Javascript Bundle(mandatory for all pages)-->
     <script src="~/assets/plugins/global/plugins.bundle.js"></script>
     <script src="~/assets/js/scripts.bundle.js"></script>
     <!--end::Global Javascript Bundle-->
     <!--begin::Custom Javascript(used for this page only)-->
     <script src="~/assets/js/custom/authentication/sign-in/general.js"></script>
+    <script>
+        var hostUrl = "/metronic8/demo1/assets/";
+        $('#SignIn').on("click", function () {
+            const identity = $('#Identity').val().trim();
+            const password = $('#Password').val().trim();
+
+            // Basit doğrulama
+            if (!identity || !password) {
+                //e.preventDefault(); // Formun sunucuya gönderimini durdur
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Hata!',
+                    text: 'Kullanıcı adı ve parola gereklidir.',
+                    confirmButtonText: 'Tamam'
+                });
+                return false;
+            }
+            $.ajax({
+                url: "/Login/SignIn",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ Identity: identity, Password: password }),
+                success: function (response) {
+
+                    window.location.href = "/Home";
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        title: "Hata!",
+                        text: xhr?.responseText ?? "Bir hata oluştu. Lütfen tekrar deneyin.",
+                        icon: "error",
+                        confirmButtonText: "Tamam",
+                    });
+                    console.error("Hata:", error, xhr.responseText);
+                },
+            });
+
+        });
+    </script>
+
+
+
     <!--end::Custom Javascript-->
     <!--end::Javascript-->
 </body>

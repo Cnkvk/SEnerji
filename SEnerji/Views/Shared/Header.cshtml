@@ -1,4 +1,6 @@
-﻿<div id="kt_app_header" class="app-header " data-kt-sticky="true" data-kt-sticky-activate="{default: true, lg: true}" data-kt-sticky-name="app-header-minimize" data-kt-sticky-offset="{default: '200px', lg: '0'}" data-kt-sticky-animation="false">
+﻿﻿@using System.Security.Claims;
+
+<div id="kt_app_header" class="app-header " data-kt-sticky="true" data-kt-sticky-activate="{default: true, lg: true}" data-kt-sticky-name="app-header-minimize" data-kt-sticky-offset="{default: '200px', lg: '0'}" data-kt-sticky-animation="false">
 
     <!--begin::Header container-->
     <div class="app-container  container-fluid d-flex align-items-stretch justify-content-between " id="kt_app_header_container">
@@ -148,16 +150,27 @@
                                     <img alt="Logo" src="assets/media/avatars/300-3.jpg">
                                 </div>
                                 <!--end::Avatar-->
-                                <!--begin::Username-->
-                                <div class="d-flex flex-column">
-                                    <div class="fw-bold d-flex align-items-center fs-5">
-                                        Robert Fox                    <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">Pro</span>
-                                    </div>
+                              
+                                    <div class="d-flex flex-column">
+                                        
+                                        <div class="fw-bold d-flex align-items-center fs-5" id="AuthorizedUserName2">
 
-                                    <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">
-                                        robert@kt.com
-                                    </a>
-                                </div>
+                                        @Context.User.Claims.FirstOrDefault(f => f.Type == "Name").Value 
+                                        @Context.User.Claims.FirstOrDefault(f => f.Type == "Surname").Value
+                                       @*  @ViewBag.UserName *@
+                                    </div>               
+                                        
+                                    
+                                       
+
+                                        <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">
+                                        @Context.User.Claims.FirstOrDefault(f => f.Type == "Rol").Value
+
+                                        </a>
+                                    </div>
+                               
+                                <!--begin::Username-->
+                                
                                 <!--end::Username-->
                             </div>
                         </div>
@@ -291,3 +304,24 @@
     </div>
     <!--end::Header container-->
 </div>
+<script>
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+    var x = document.cookie;
+    console.log("cookie:", x);
+
+    $('#AuthorizedUserName').text(getCookie("UserName"));
+</script>

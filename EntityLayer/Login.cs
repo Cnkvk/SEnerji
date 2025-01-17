@@ -12,5 +12,7 @@ namespace EntityLayer
         public string Identity { get; set; }
         public int CustomerId { get; set; }
         public int PersonelId { get; set; }
+        public Customer Customer { get; set; }
+        public Personel Personel { get; set; }
     }
 }
