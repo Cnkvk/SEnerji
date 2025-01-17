@@ -20,7 +20,6 @@ namespace SEnerji.Controllers
 
         private static readonly string ApiUrl = "https://api.openchargemap.io/v3/poi";
         private static readonly string ApiKey = "1cff6936-69cb-4e68-80df-d479970e9251"; // API Anahtarınız
-
         private static readonly string CountryCode = "TR"; // Türkiye'nin ülke kodu
         private static readonly int MaxResults = 200; // İstediğiniz sayıda şarj istasyonu (isteğe bağlı)
 
@@ -32,16 +31,12 @@ namespace SEnerji.Controllers
                 {
                     // API'ye gerekli parametrelerle istek gönderiyoruz
                     string url = $"{ApiUrl}?countrycode={CountryCode}&maxresults={MaxResults}&key={ApiKey}";
-
                     // API'den veri alıyoruz
                     var response = await client.GetStringAsync(url);
-
                     // JSON verisini deserialize ediyoruz
                     var chargingStationsResponse = JsonConvert.DeserializeObject<List<ChargingStationResponse>>(response);
-
                     // Yalnızca AddressInfo ve Level bilgilerini alıp dönüştürüyoruz
                     var chargingStations = new List<ChargingStation>();
-
                     foreach (var station in chargingStationsResponse)
                     {
                         var chargingStation = new ChargingStation
