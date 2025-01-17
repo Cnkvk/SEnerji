@@ -31,6 +31,34 @@
         margin-bottom: 20px; /* Footer için alan yarat */
     }
 
+    .centered-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-left: auto;
+        margin-right: 0;
+    }
+
+        .centered-container img {
+            width: 70px;
+            height: 70px;
+        }
+
+        .centered-container .btn {
+            width: 80%;
+            margin-top: 10px;
+        }
+
+ 
+
+    .ms-3 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+    }
 </style>
 
 @if (ViewData["ErrorMessage"] != null)
@@ -45,6 +73,8 @@
 </div>
 
 <div id="dvMap" style="height: 500px;"></div>
+
+
 
 
 <!-- Leaflet.js kütüphanesini ve harita stilini dahil ediyoruz -->
@@ -252,15 +282,31 @@
                         <div class="fw-semibold mb-2">Şarj Edilecek Yüzde: <span id="kt_slider_basic_max"></span></div>
                     </div>
                 </div>
-                <div class="mb-0">
-                    <button type="button" id="calculateButton" class="btn btn-primary">Hesapla</button>
+                <div class="mb-0 d-flex align-items-center">
+                    <!-- Hesapla Button -->
+                 @*    <button type="button" id="calculateButton" class="btn btn-primary me-3">Hesapla</button>
+ *@
+
+                    <div class="mb-0">
+                        <button type="button" id="calculateButton" class="btn btn-primary">Hesapla</button>
+                    </div>
+                    <!-- Sonuç (Centered with Flexbox) -->
+                    <div class="d-flex flex-column align-items-center ms-3">
+                        <h4>Şarj Süresi: <span id="chargeTimeResult">--</span></h4>
+                        <h4>Fiyat Bilgisi: <span id="priceResult">--</span></h4>
+                    </div>
+
+                    <div class="centered-container">
+                        <!-- Araç Resmi -->
+                        <img src="/Resimler/EsarjLogo.png" alt="Araba">
+
+                        <!-- Satış Başlat Butonu -->
+                        <button type="button" class="btn btn-primary" onclick="AddSale()">
+                            Şarj Et
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Sonuç -->
-                <div class="mt-3">
-                    <h4>Şarj Süresi: <span id="chargeTimeResult">--</span></h4>
-                </div>
-                <!--end::Card body-->
             </form>
         </div>
 
