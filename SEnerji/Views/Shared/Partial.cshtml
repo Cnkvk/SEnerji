@@ -10,20 +10,7 @@
             <img alt="Logo" src="Resimler/ESarjLogo.png" class="h-60px app-sidebar-logo-minimize">
         </a>
         <!--end::Logo image-->
-        <!--begin::Sidebar toggle-->
-        <!--begin::Minimized sidebar setup:
-            if (isset($_COOKIE["sidebar_minimize_state"]) && $_COOKIE["sidebar_minimize_state"] === "on") {
-                1. "src/js/layout/sidebar.js" adds "sidebar_minimize_state" cookie value to save the sidebar minimize state.
-                2. Set data-kt-app-sidebar-minimize="on" attribute for body tag.
-                3. Set data-kt-toggle-state="active" attribute to the toggle element with "kt_app_sidebar_toggle" id.
-                4. Add "active" class to to sidebar toggle element with "kt_app_sidebar_toggle" id.
-            }
-        -->
-        <div id="kt_app_sidebar_toggle" class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary h-30px w-30px position-absolute top-50 start-100 translate-middle rotate " data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="app-sidebar-minimize">
 
-            <i class="ki-duotone ki-black-left-line fs-3 rotate-180"><span class="path1"></span><span class="path2"></span></i>
-        </div>
-        <!--end::Sidebar toggle-->
     </div>
     <!--end::Logo-->
     <!--begin::sidebar menu-->
@@ -35,7 +22,9 @@
                 <!--begin::Menu-->
                 <div class="menu menu-column menu-rounded menu-sub-indention fw-semibold fs-6" id="#kt_app_sidebar_menu" data-kt-menu="true" data-kt-menu-expand="false">
 
-                    <!--begin:Menu item--><div class="menu-item pt-5">
+                    <!--begin:Menu item-->
+                    
+                    <div class="menu-item pt-5">
                         <!--begin:Menu content--><div class="menu-content"><span class="menu-heading fw-bold text-uppercase fs-7">Şehirlere Göre Ara</span></div><!--end:Menu content-->
                         <!-- ara input  -->
 
@@ -50,90 +39,13 @@
 
 
                     </div><!--end:Menu item-->
-                    <!--begin:Menu item-->
-                    @*        <div class="menu-item">
-                    <!--begin:Menu link--><a class="menu-link" href="apps/calendar.html">
-                    <span class="menu-icon"><i class="ki-duotone ki-calendar-8 fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span></i></span>
-                    <span class="menu-title">Profilim</span>
-                    </a><!--end:Menu link-->
-                    </div>
-                    <!--end:Menu item-->
-
-                    <!--begin:Menu item-->
-                    <div class="menu-item">
-                    <!--begin:Menu link--><a class="menu-link" href="apps/calendar.html">
-                    <span class="menu-icon"><i class="ki-duotone ki-calendar-8 fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span></i></span>
-                    <span class="menu-title">Hesap Ayarları</span>
-                    </a><!--end:Menu link--> *@
-                </div>
-                <!--end:Menu item-->
-                @*
-                <!--begin:Menu item--><div class="menu-item pt-5">
-                <!--begin:Menu content--><div class="menu-content">
-                <span class="menu-heading fw-bold text-uppercase fs-7">İşlemler</span>
-                </div><!--end:Menu content-->
-                </div><!--end:Menu item-->
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                <!--begin:Menu link--><a class="menu-link" href="~/Range">
-                <span class="menu-icon"><i class="ki-duotone ki-calendar-8 fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span></i></span>
-                <span class="menu-title">Şarj Süresi Hesaplama</span>
-                </a><!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                <!--begin:Menu link--><a class="menu-link" href="~/Sale/SalePage">
-                <span class="menu-icon"><i class="ki-duotone ki-calendar-8 fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span></i></span>
-                <span class="menu-title">Şarj Satış</span>
-                </a><!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                <!--begin:Menu link--><a class="menu-link" href="~/Sale">
-                <span class="menu-icon"><i class="ki-duotone ki-calendar-8 fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span></i></span>
-                <span class="menu-title">Şarj Geçmişi</span>
-                </a><!--end:Menu link-->
-                </div> *@
-                <!--end:Menu item-->
-                @*                <!--begin:Menu item--><div class="menu-item pt-5">
-                <!--begin:Menu content--><div class="menu-content">
-                <span class="menu-heading fw-bold text-uppercase fs-7">Hakkımızda</span>
-                </div><!--end:Menu content-->
-                </div><!--end:Menu item-->
-
-                <!--begin:Menu item--><div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                <!--begin:Menu link--><span class="menu-link">
-                <span class="menu-icon"><i class="ki-duotone ki-abstract-25 fs-2"><span class="path1"></span><span class="path2"></span></i></span>
-                <span class="menu-title">İletişim</span>
-                </span><!--end:Menu link-->
-                </div><!--end:Menu item-->
-                *@
-                @*    <!--begin:Menu item--><div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                <!--begin:Menu link--><span class="menu-link">
-                <span class="menu-icon"><i class="ki-duotone ki-abstract-38 fs-2"><span class="path1"></span><span class="path2"></span></i></span>
-                <span class="menu-title">Customers</span>
-                </span><!--end:Menu link-->
-                </div><!--end:Menu item-->
-                *@
 
 
-                @*       <!--begin:Menu item--><div class="menu-item">
-                <!--begin:Menu link--><a class="menu-link" href="apps/calendar.html">
-                <span class="menu-icon"><i class="ki-duotone ki-calendar-8 fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span></i></span>
-                <span class="menu-title">Takvim</span>
-                </a><!--end:Menu link-->
+                
                 </div>
-                <!--end:Menu item-->
-                <!--begin:Menu item--><div class="menu-item">
-                <!--begin:Menu link--><a class="menu-link" href="apps/calendar.html">
-                <span class="menu-icon"><i class="ki-duotone ki-calendar-8 fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span></i></span>
-                <span class="menu-title">Yardım</span>
-                </a><!--end:Menu link-->
-                </div>
-                <!--end:Menu item--> *@
-
+           
+           
+       
 
 
             </div>
@@ -146,23 +58,39 @@
 
 
 <!--end::sidebar menu-->
-<!--begin::Footer-->
-<div class="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6" id="kt_app_sidebar_footer">
-    @*   <a href="https://preview.keenthemes.com/html/metronic/docs" class="btn btn-flex flex-center btn-custom btn-primary overflow-hidden text-nowrap px-0 h-40px w-100" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss-="click" title="200+ in-house components and 3rd-party plugins">
-
-    <span class="btn-label">
-    Docs & Components
-    </span>
-
-    <i class="ki-duotone ki-document btn-icon fs-2 m-0"><span class="path1"></span><span class="path2"></span></i>
-    </a> *@
-</div>
-<!--end::Footer-->
 
 
 
 <script>
     $(document).ready(function () {
+        // Sayfa yüklendiğinde İstanbul verilerini al ve listele
+        $.ajax({
+            url: `https://api.sarj.dev/v1/search/suggest?q=İstanbul`, // Varsayılan şehir İstanbul
+            type: 'GET',
+            success: function (response) {
+                // Gelen veriyi ekliyoruz
+                var results = response.suggestions || []; // API'den gelen veriyi alıyoruz
+                var resultsHtml = '';
+
+                // Verileri liste haline getiriyoruz
+                if (results.length > 0) {
+                    results.forEach(function (item) {
+                        console.log(item);
+                        resultsHtml += `<p>${item.highlightedText}</p>`; // Her öneriyi paragraf olarak ekliyoruz
+                    });
+                } else {
+                    resultsHtml = '<p>Sonuç bulunamadı.</p>';
+                }
+
+                // Sonuçları input'un altına ekliyoruz
+                $('#searchResults').html(resultsHtml);
+            },
+            error: function () {
+                $('#searchResults').html('<p>API isteği sırasında bir hata oluştu.</p>');
+            }
+        });
+
+        // Ara butonuna tıklandığında API'den şehir adına göre veri çek
         $('#button-addon2').on('click', function () {
             var sehirAdi = $('#sehirAdi').val(); // Input'tan şehir adını alıyoruz
 

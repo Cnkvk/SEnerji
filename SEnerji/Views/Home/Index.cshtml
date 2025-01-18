@@ -45,10 +45,13 @@
         }
 
         .centered-container .btn {
-            width: 80%;
+            
             margin-top: 10px;
         }
 
+    .btn {
+        white-space: nowrap; /* Yazının alt alta düşmesini engeller */
+    }
  
 
     .ms-3 {
@@ -68,7 +71,7 @@
     </div>
 }
 <div id="footer">
-    <img src="~/Resimler/EsarjLogo.png" alt="Logo"> <!-- Burada logo path'i doğru olmalı -->
+   @*  <img src="~/Resimler/EsarjLogo.png" alt="Logo"> *@ <!-- Burada logo path'i doğru olmalı -->
     <h1>Şarj İstasyonları Listesi</h1>
 </div>
 
@@ -284,8 +287,8 @@
                 </div>
                 <div class="mb-0 d-flex align-items-center">
                     <!-- Hesapla Button -->
-                 @*    <button type="button" id="calculateButton" class="btn btn-primary me-3">Hesapla</button>
- *@
+                 @*    <button type="button" id="calculateButton" class="btn btn-primary me-3">Hesapla</button>*@
+ 
 
                     <div class="mb-0">
                         <button type="button" id="calculateButton" class="btn btn-primary">Hesapla</button>
@@ -298,10 +301,10 @@
 
                     <div class="centered-container">
                         <!-- Araç Resmi -->
-                        <img src="/Resimler/EsarjLogo.png" alt="Araba">
+                      @*   <img src="/Resimler/EsarjLogo.png" alt="Araba"> *@
 
                         <!-- Satış Başlat Butonu -->
-                        <button type="button" class="btn btn-primary" onclick="AddSale()">
+                        <button type="button" class="btn btn-success" onclick="AddSale()">
                             Şarj Et
                         </button>
                     </div>

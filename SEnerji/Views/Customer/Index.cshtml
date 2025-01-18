@@ -557,5 +557,52 @@
     }
 
 
+
+
+    document.querySelector('[data-kt-ecommerce-product-filter="search"]').addEventListener('input', function () {
+        var searchTerm = this.value.toLowerCase(); // Kullanıcının yazdığı değeri alıyoruz
+        var rows = document.querySelectorAll('tr'); // Tablodaki tüm satırları alıyoruz
+
+        // Tüm satırlarda gezinerek eşleşmeleri kontrol ediyoruz
+        rows.forEach(function (row) {
+            var nameCell = row.querySelector('td a[data-kt-ecommerce-product-filter="product_name"]'); // İsim hücresini buluyoruz
+            if (nameCell) {
+                var name = nameCell.textContent.toLowerCase(); // İsim hücresindeki metni alıyoruz
+                if (name.includes(searchTerm)) {
+                    row.style.display = ''; // Eşleşen isimleri gösteriyoruz
+                } else {
+                    row.style.display = 'none'; // Eşleşmeyen isimleri gizliyoruz
+                }
+            }
+        });
+    });
+
+
+    document.querySelector('[data-kt-ecommerce-product-filter="search"]').addEventListener('input', function () {
+        var searchTerm = this.value.toLowerCase();
+        var rows = Array.from(document.querySelectorAll('tr')); // Tüm satırları alıyoruz ve bir diziye dönüştürüyoruz
+
+        // Satırları sıralamak için eşleşenleri başa taşıyoruz
+        rows.sort(function (a, b) {
+            var nameA = a.querySelector('td a[data-kt-ecommerce-product-filter="product_name"]').textContent.toLowerCase();
+            var nameB = b.querySelector('td a[data-kt-ecommerce-product-filter="product_name"]').textContent.toLowerCase();
+
+            if (nameA.includes(searchTerm) && !nameB.includes(searchTerm)) {
+                return -1; // nameA'yı en üste al
+            } else if (!nameA.includes(searchTerm) && nameB.includes(searchTerm)) {
+                return 1; // nameB'yi en üste al
+            }
+            return 0; // Değişiklik yoksa sıralamayı değiştirme
+        });
+
+        // Yeniden sıralanan satırları tabloya ekliyoruz
+        var table = document.querySelector('table');
+        rows.forEach(function (row) {
+            table.appendChild(row); // Satırları sıralı şekilde tabloya ekliyoruz
+        });
+    });
+
+
+
 </script>
 
