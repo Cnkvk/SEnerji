@@ -31,7 +31,6 @@ namespace SEnerji.Controllers
             {
                 // Müşteri tablosunda kullanıcıyı buluyoruz
                 var customer = _context.customers.FirstOrDefault(c => c.Id == userId);
-
                 if (customer != null)
                 {
                     // Müşteriye ait bilgileri DTO'ya ekliyoruz
@@ -48,7 +47,6 @@ namespace SEnerji.Controllers
             {
                 // Personel tablosunda kullanıcıyı buluyoruz
                 var personel = _context.personels.FirstOrDefault(p => p.Id == userId);
-
                 if (personel != null)
                 {
                     // Personel'e ait bilgileri DTO'ya ekliyoruz
