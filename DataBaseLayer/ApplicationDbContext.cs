@@ -24,8 +24,8 @@ namespace DataBaseLayer
         {
             if (!optionsBuilder.IsConfigured)
             {
-               optionsBuilder.UseSqlServer("Server = CNKVK\\CNKVK; Database = SEnerji; Trusted_Connection = True; TrustServerCertificate=True;");
-               //optionsBuilder.UseSqlServer("Server = DESKTOP-EQOD4HE; Database = SEnerji; Trusted_Connection = True; TrustServerCertificate=True;");
+              // optionsBuilder.UseSqlServer("Server = CNKVK\\CNKVK; Database = SEnerji; Trusted_Connection = True; TrustServerCertificate=True;");
+             optionsBuilder.UseSqlServer("Server = DESKTOP-EQOD4HE; Database = SEnerji; Trusted_Connection = True; TrustServerCertificate=True;");
             }
         }
         public DbSet<Customer> customers { get; set; }
