@@ -71,6 +71,7 @@ namespace SEnerji.Controllers
             claims.Add(new Claim("Name",Name));
             claims.Add(new Claim("Surname", Surname));
             claims.Add(new Claim("Rol", role));
+            claims.Add(new Claim("id", id));
 
 
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -114,9 +115,55 @@ namespace SEnerji.Controllers
 
             return Ok(new { message = $"{role} olarak giriş yapıldı.", role });
         }
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            // Kullanıcının oturumunu kapatma
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Tüm çerezleri temizlemek
+            foreach (var cookie in Request.Cookies.Keys)
+            {
+                Response.Cookies.Delete(cookie);
+            }
+
+            // Login sayfasına yönlendirme
+            return RedirectToAction("Index", "Login");
+        }
+        [HttpGet]
         public IActionResult SignUp()
         {
+          
             return View();
+            
+        }
+        [HttpPost]
+        public IActionResult SignUp([FromBody]Customer customer)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return BadRequest(new { message = "Model hatalı", errors });
+            }
+            var existingCustomerByIdentity = _context.customers.FirstOrDefault(c => c.Identity == customer.Identity);
+            var existingCustomerByPlate = _context.customers.FirstOrDefault(c => c.Plate == customer.Plate);
+            if (existingCustomerByIdentity != null)
+            {
+                return BadRequest(new { message = "Bu TC kimlik numarası zaten kayıtlı." });
+            }
+
+            if (existingCustomerByPlate != null)
+            {
+                return BadRequest(new { message = "Bu plaka zaten kayıtlı." });
+            }
+
+            // Müşteri statüsünü ve veritabanı işlemlerini tamamlıyoruz
+            customer.Status = 1;
+            _context.Add(customer);
+            _context.SaveChanges();
+
+            // Başarı mesajı ve yönlendirme
+            return RedirectToAction("Index", "Login"); // Başarılı olursa Login/Index'e yönlendir
         }
         public IActionResult ResetPassword()
         {
