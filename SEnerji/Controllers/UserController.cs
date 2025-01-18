@@ -56,6 +56,7 @@ namespace SEnerji.Controllers
                     userDTO.Email = personel.Email;
                     userDTO.City = personel.City;
                     userDTO.Identity = personel.Identity;
+                    
                     userDTO.Salary = personel.Salary; // Sadece Personel için geçerli
                 }
             }
