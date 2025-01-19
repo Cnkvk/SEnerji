@@ -35,9 +35,6 @@
 
                         <!-- API'den gelen sonuçların gösterileceği alan -->
                         <div id="searchResults"></div>
-
-
-
                     </div><!--end:Menu item-->
 
 
@@ -59,13 +56,13 @@
 
 <!--end::sidebar menu-->
 
-
+@* 
 
 <script>
     $(document).ready(function () {
         // Sayfa yüklendiğinde İstanbul verilerini al ve listele
         $.ajax({
-            url: `https://api.sarj.dev/v1/search/suggest?q=İstanbul`, // Varsayılan şehir İstanbul
+            url: 'https://api.openchargemap.io/v3/poi', // Varsayılan şehir İstanbul
             type: 'GET',
             success: function (response) {
                 // Gelen veriyi ekliyoruz
@@ -125,5 +122,69 @@
                 alert('Lütfen bir şehir adı girin.');
             }
         });
+    });
+</script>
+ *@
+
+
+<script>
+    $(document).ready(function () {
+        // Sayfa yüklendiğinde tüm istasyonları listele
+        listStations();
+
+        // "Ara" butonuna tıklandığında şehir adıyla filtrele
+        $('#button-addon2').on('click', function () {
+            var sehirAdi = $('#sehirAdi').val(); // Kullanıcının girdiği şehir adını al
+
+            if (sehirAdi) {
+                $('#searchResults').html('<p>Sonuçlar yükleniyor...</p>'); // Yükleme mesajı göster
+                listStations(sehirAdi, true); // Şehir adıyla filtreleme yap ve varsayılanları gizle
+            } else {
+                alert('Lütfen bir şehir adı girin.');
+            }
+        });
+
+        // İstasyonları listeleme fonksiyonu
+        function listStations(sehirAdi = '', clearPrevious = false) {
+            // OpenChargeMap API isteği
+            $.ajax({
+                url: `https://api.openchargemap.io/v3/poi`,
+                type: 'GET',
+                data: {
+                    key: '1cff6936-69cb-4e68-80df-d479970e9251', // Buraya kendi OpenChargeMap API anahtarınızı koyun
+                    countrycode: 'TR', // Türkiye için country code
+                    'address.town': sehirAdi // Şehir filtresi (boşsa tüm sonuçları döner)
+                },
+                success: function (response) {
+                    // Gelen sonuçları listeleme
+                    var resultsHtml = '';
+                    if (response.length > 0) {
+                        response.forEach(function (item) {
+                            // İstasyon bilgilerini göster
+                            resultsHtml += `
+                                    <div>
+                                        <h4>${item.AddressInfo.Title}</h4>
+                                        <p>${item.AddressInfo.AddressLine1}, ${item.AddressInfo.Town || 'Şehir bilgisi yok'}</p>
+                                        <p><strong>Çalışma Saatleri:</strong> ${item.UsageCost || 'Bilgi yok'}</p>
+                                    </div><hr>`;
+                        });
+                    } else {
+                        resultsHtml = '<p>Sonuç bulunamadı.</p>';
+                    }
+
+                    // Eğer clearPrevious true ise sonuçları tamamen temizle ve yenileri ekle
+                    if (clearPrevious) {
+                        $('#searchResults').html(resultsHtml);
+                    } else {
+                        // Varsayılan verileri alt alta ekle
+                        $('#searchResults').append(resultsHtml);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("API Hatası:", status, error);
+                    $('#searchResults').html('<p>API isteği sırasında bir hata oluştu.</p>');
+                }
+            });
+        }
     });
 </script>
