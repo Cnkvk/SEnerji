@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Login\NewPassword.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Login\NewPassword.cshtml" />
     <None Include="wwwroot\assets\js\custom\account\api-keys\api-keys.js" />
     <None Include="wwwroot\assets\js\custom\account\billing\general.js" />
     <None Include="wwwroot\assets\js\custom\account\referrals\referral-program.js" />
@@ -455,14 +450,6 @@
   <ItemGroup>
     <ProjectReference Include="..\DataBaseLayer\DataBaseLayer.csproj" />
     <ProjectReference Include="..\EntityLayer\EntityLayer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Login\NewPassword.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Login\NewPassword.cshtml" />
   </ItemGroup>
 
 </Project>

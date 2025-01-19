@@ -170,11 +170,7 @@ namespace SEnerji.Controllers
             return View();
         }
 
-        public IActionResult NewPassword()
-        {
-            return View();
-        }
-
+       
     }
 
 }
