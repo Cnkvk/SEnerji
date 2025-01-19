@@ -364,6 +364,53 @@
         // Sonucu formatla ve görüntüle
         document.getElementById('chargeTimeResult').textContent = hours + " saat " + minutesFormatted + " dakika"; // 2 ondalıklı göster
     });
+    document.getElementById('calculateButton').addEventListener('click', function () {
+        // Araç kW Değerini al
+        var vehicleKw = parseFloat(document.getElementById('vehicleKw').value);
+
+        // Seçilen kW değerini al
+        var selectedKw = parseFloat(document.querySelector('input[name="plan"]:checked').value);
+
+        // Slider'dan min ve max değerlerini al
+        var min = parseFloat(valueMin.innerHTML);
+        var max = parseFloat(valueMax.innerHTML);
+
+        // Hesaplama: Şarj için ihtiyaç duyulan enerji (kWh)
+        var energyNeeded = ((vehicleKw * (max - min)) / 100);
+
+        // Fiyat tarifelerini tanımla
+        const pricing = {
+            '240DC_PUBLIC': 9.90, // 240 kW'a kadar DC (Halka Açık)
+            '120DC_PRIVATE': 8.90, // 120 kW'a kadar DC (Özel)
+            '22AC_PUBLIC': 7.90, // 22 kW AC (Halka Açık)
+            '22AC_PRIVATE': 6.90 // 22 kW AC (Özel)
+        };
+
+        // Fiyat tarifesi belirleme
+        let pricePerKwh;
+        if (selectedKw > 120) {
+            pricePerKwh = pricing['240DC_PUBLIC']; // 240 kW DC tarifesi
+        } else if (selectedKw > 60) {
+            pricePerKwh = pricing['120DC_PRIVATE']; // 120 kW DC tarifesi
+        } else if (selectedKw > 11) {
+            pricePerKwh = pricing['22AC_PUBLIC']; // 22 kW AC (Halka Açık)
+        } else {
+            pricePerKwh = pricing['22AC_PRIVATE']; // 22 kW AC (Özel)
+        }
+
+        // Toplam fiyat hesaplama
+        var totalPrice = energyNeeded * pricePerKwh;
+
+        // Saat ve dakika olarak şarj süresi
+        var chargeTime = energyNeeded / selectedKw * 60;
+        let hours = Math.floor(chargeTime / 60); // Saat kısmı
+        let minutes = chargeTime % 60; // Dakika kısmı
+        let minutesFormatted = minutes.toFixed(0);
+
+        // Sonuçları ekranda göster
+        document.getElementById('chargeTimeResult').textContent = hours + " saat " + minutesFormatted + " dakika";
+        document.getElementById('priceResult').textContent = totalPrice.toFixed(2) + " TL";
+    });
 </script>
 
 

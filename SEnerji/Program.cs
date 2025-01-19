@@ -17,7 +17,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Çerez süresi
         options.SlidingExpiration = true; // Kullaným süresine göre süreyi uzatma
     });
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("PersonelOnly", policy => policy.RequireClaim("Rol", "Personel"));
+    options.AddPolicy("CustomerOnly", policy => policy.RequireClaim("Rol", "Customer"));
+});
 
 var app = builder.Build();
 

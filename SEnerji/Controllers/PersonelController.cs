@@ -1,12 +1,15 @@
 ﻿using DataBaseLayer;
 using EntityLayer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SEnerji.Controllers
 {
     public class PersonelController : Controller
     {
+        
         private readonly ApplicationDbContext _context = new();
+        [Authorize(Policy = "PersonelOnly")]
         public IActionResult Index()
         {
             var Personel = _context.personels
