@@ -29,7 +29,7 @@
                         <!-- ara input  -->
 
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" name="sehirAdi" id="sehirAdi" placeholder="Şehir Adı Gir" aria-label="Şehir Adı Gir" aria-describedby="button-addon2">
+                            <input type="text" class="form-control" name="stateOrProvince" id="stateOrProvince" placeholder="Bölge Adı Gir" aria-label="Bölge Adı Gir" aria-describedby="button-addon2">
                             <button class="btn btn-outline-secondary" type="button" id="button-addon2">Ara</button>
                         </div>
 
@@ -132,20 +132,23 @@
         // Sayfa yüklendiğinde tüm istasyonları listele
         listStations();
 
-        // "Ara" butonuna tıklandığında şehir adıyla filtrele
+        // "Ara" butonuna tıklandığında bölge adıyla filtrele
         $('#button-addon2').on('click', function () {
-            var sehirAdi = $('#sehirAdi').val(); // Kullanıcının girdiği şehir adını al
+            var stateOrProvince = $('#stateOrProvince').val().trim(); // Kullanıcının girdiği bölge adını al
 
-            if (sehirAdi) {
+            if (stateOrProvince) {
+                // İlk harfi büyük yap
+                stateOrProvince = stateOrProvince.charAt(0).toUpperCase() + stateOrProvince.slice(1);
+
                 $('#searchResults').html('<p>Sonuçlar yükleniyor...</p>'); // Yükleme mesajı göster
-                listStations(sehirAdi, true); // Şehir adıyla filtreleme yap ve varsayılanları gizle
+                listStations(stateOrProvince, true); // Bölge adıyla filtreleme yap ve varsayılanları gizle
             } else {
-                alert('Lütfen bir şehir adı girin.');
+                alert('Lütfen bir bölge adı girin.');
             }
         });
 
         // İstasyonları listeleme fonksiyonu
-        function listStations(sehirAdi = '', clearPrevious = false) {
+        function listStations(stateOrProvince = '', clearPrevious = false) {
             // OpenChargeMap API isteği
             $.ajax({
                 url: `https://api.openchargemap.io/v3/poi`,
@@ -153,30 +156,36 @@
                 data: {
                     key: '1cff6936-69cb-4e68-80df-d479970e9251', // Buraya kendi OpenChargeMap API anahtarınızı koyun
                     countrycode: 'TR', // Türkiye için country code
-                    'address.town': sehirAdi // Şehir filtresi (boşsa tüm sonuçları döner)
+                    'address.stateorprovince': encodeURIComponent(stateOrProvince) // Bölge filtresi
                 },
                 success: function (response) {
                     // Gelen sonuçları listeleme
                     var resultsHtml = '';
-                    if (response.length > 0) {
-                        response.forEach(function (item) {
-                            // İstasyon bilgilerini göster
+                    var filteredResults = response;
+
+                    if (stateOrProvince) {
+                        // Kullanıcının girdiği bölgeyi küçük harfe dönüştür ve boşlukları temizle
+                        filteredResults = response.filter(function (item) {
+                            return item.AddressInfo.StateOrProvince &&
+                                item.AddressInfo.StateOrProvince.trim().toLowerCase() === stateOrProvince.trim().toLowerCase();
+                        });
+                    }
+
+                    if (filteredResults.length > 0) {
+                        filteredResults.forEach(function (item) {
                             resultsHtml += `
-                                    <div>
-                                        <h4>${item.AddressInfo.Title}</h4>
-                                        <p>${item.AddressInfo.AddressLine1}, ${item.AddressInfo.Town || 'Şehir bilgisi yok'}</p>
-                                      
-                                    </div><hr>`;
+                                <div>
+                                    <h4>${item.AddressInfo.Title}</h4>
+                                    <p>${item.AddressInfo.AddressLine1}, ${item.AddressInfo.StateOrProvince || 'Bölge bilgisi yok'}</p>
+                                </div><hr>`;
                         });
                     } else {
                         resultsHtml = '<p>Sonuç bulunamadı.</p>';
                     }
 
-                    // Eğer clearPrevious true ise sonuçları tamamen temizle ve yenileri ekle
                     if (clearPrevious) {
                         $('#searchResults').html(resultsHtml);
                     } else {
-                        // Varsayılan verileri alt alta ekle
                         $('#searchResults').append(resultsHtml);
                     }
                 },
