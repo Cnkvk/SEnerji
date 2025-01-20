@@ -84,8 +84,6 @@ namespace SEnerji.Controllers
             };
 
 
-
-      
             // Oturum aç
             HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, properties);
 

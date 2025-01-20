@@ -9,6 +9,7 @@ namespace SEnerji.Controllers
     {
         
         private readonly ApplicationDbContext _context = new();
+
         [Authorize(Policy = "PersonelOnly")]
         public IActionResult Index()
         {
