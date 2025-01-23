@@ -123,7 +123,7 @@
                                     <th>TC</th>
                                     <th>Maaş</th>
                                     <th>Email</th>
-                                    <th>Password</th>
+                                   @*  <th>Password</th> *@
                                     <th>Düzenle</th>
                                 </tr>
                             </thead>
@@ -149,15 +149,16 @@
                                         <td class="text-left pe-0" data-order="14">
                                             <span class="fw-bold ms-3">@item.City</span>
                                         </td>
-                                        <td class="text-left pe-0">@item.Identity</td>
+                                        <td class="text-left pe-0">@MaskString(item.Identity)</td>
+
                                         <td class="text-left pe-0">@item.Salary</td>
                                         <td class="text-left pe-0">@item.Email</td>
-                                        <td class="text-left pe-0">@item.Password</td>
+                                       @*  <td class="text-left pe-0">@item.Password</td> *@
 
 
 
                                         <td class="text-right">
-                                            <a href="#" onclick="openUpdateModal()" class="btn btn-sm btn-light btn-flex btn-center btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                            <a href="#"  class="btn btn-sm btn-light btn-flex btn-center btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                                 Düzenle
                                                 <i class="ki-duotone ki-down fs-5 ms-1"></i>
                                             </a>
@@ -187,7 +188,7 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h3 class="modal-title">Modal title</h3>
+                                                    <h3 class="modal-title">Kullanıcı Düzenleme</h3>
 
                                                     <!--begin::Close-->
                                                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -307,7 +308,7 @@
                                                             <!--begin::Input wrapper-->
                                                             <div class="position-relative mb-3">
                                                                 <input class="form-control form-control-lg form-control-solid"
-                                                                       type="password" placeholder="" id="Password" name="new_password" autocomplete="off" />
+                                                                       type="password" placeholder="" id="Password"  autocomplete="off" />
 
                                                                 <!--begin::Visibility toggle-->
                                                                 <span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
@@ -417,39 +418,36 @@
             enableTime: true,
             dateFormat: "Y-m-d H:i",
         });
-
+        
 
     });
-
     function openUpdateModal(Id) {
-        // Müşteri verilerini AJAX ile alıyoruz
         $.ajax({
-            url: '/Personel/GetPersonelById',  // API endpoint
+            url: `/Personel/GetPersonelById?id=${Id}`, // ID'yi burada dinamik olarak ekliyoruz
             type: 'GET',
-            data: { id: Id },  // Müşteri ID'sini gönderiyoruz
             success: function (response) {
-                // Veriyi aldıktan sonra modalı dolduruyoruz
-                $('#Name').val(response.Name);
-                $('#Surname').val(response.Surname);
-                $('#Salary').val(response.Salary);
-                $('#Email').val(response.Email);
-                $('#Password').val(response.Password)
-
+                console.log("Gelen yanıt:", response); // Gelen yanıtı konsola yazdırın
+                var selectedText = $(".js-example-basic-single option:selected").text();
+                var cleanedText = selectedText.replace("Seçiniz...", "").trim();
+                if (response) {
+                    $('#Name').val(response.Name || '');
+                    $('#Surname').val(response.Surname || '');
+                    $('#Salary').val(response.Salary || '');
+                    $('#Email').val(response.Email || '');
+                    $('#Identity').val(response.Identity || '');
+                    $('#Password').val(response.Password || '');
+                    $(".js-example-basic-single").val(response.City).trigger('change');
+                } else {
+                    console.error("Boş bir yanıt döndü!");
+                }
                
-               
-
-                $('#Identity').val(response.Identity);
-
-                // Select2 ile City'yi doğru şekilde dolduruyoruz
-                $(".js-example-basic-single").val(response.City.id).trigger('change'); // ID'yi doğru şekilde gönderiyoruz
-
                 // Modalı açıyoruz
                 $('#kt_modal_1').modal('show');
-
-                // Eğer Select2'yi AJAX ile güncellediyseniz, Select2'yi yeniden başlatın
-                $(".js-example-basic-single").select2(); // Bu satır, Select2'yi tekrar başlatacaktır
             },
-
+            error: function (xhr, status, error) {
+                console.error("Hata oluştu:", status, error);
+                Swal.fire('Hata!', 'Personel verileri alınamadı.', 'error');
+            }
         });
     }
 
@@ -630,8 +628,19 @@
 
 
 
+    @functions {
+        public string MaskString(string input)
+        {
+            if (input.Length <= 4)
+                return input;
 
+            var start = input.Substring(0, 2);
+            var end = input.Substring(input.Length - 2, 2);
+            var maskedPart = new string('*', input.Length - 4);
 
+            return start + maskedPart + end;
+        }
+    }
 
 </script>
 

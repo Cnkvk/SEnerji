@@ -13,6 +13,8 @@ namespace EntityLayer.Dto
         public string? Email { get; set; }
         public string? City { get; set; }
         public string? Identity { get; set; }
+
+        public string? Password { get; set; }
         public string? Plate { get; set; } // Sadece Customer için dolu olabilir
         public decimal? Salary { get; set; } // Sadece Personel için dolu olabilir
         public DateTime? Birthday { get; set; } // Sadece Customer için dolu olabilir

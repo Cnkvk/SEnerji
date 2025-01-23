@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SEnerji.Controllers
 {
@@ -30,9 +32,31 @@ namespace SEnerji.Controllers
             // İlk olarak müşteri tablosunda Identity kontrolü yap
             var customer = _context.customers.FirstOrDefault(c => c.Identity == loginRequestModel.Identity);
 
+
+            string ConvertToMD5(string input)
+            {
+                using (var md5 = MD5.Create())
+                {
+                    byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+                    byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                    // Hash'i hex string'e çevir
+                    StringBuilder sb = new StringBuilder();
+                    foreach (byte b in hashBytes)
+                    {
+                        sb.Append(b.ToString("x2"));
+                    }
+                    return sb.ToString();
+                }
+            }
+
+            // Şifreyi MD5 formatına çevir
+            string hashedPassword = ConvertToMD5(loginRequestModel.Password);
+
+
             if (customer != null) // Eğer müşteri bulunduysa
             {
-                if (customer.Password == loginRequestModel.Password) // Şifre kontrolü
+                if (customer.Password == hashedPassword) // Şifre kontrolü
                 {
                     // Kullanıcıyı oturum açtırmak için SignInUser metoduna yönlendirme
                     return SignInUser(customer.Id.ToString(), customer.Name, customer.Surname, "Customer");
@@ -48,7 +72,7 @@ namespace SEnerji.Controllers
 
             if (personel != null) // Eğer personel bulunduysa
             {
-                if (personel.Password == loginRequestModel.Password) // Şifre kontrolü
+                if (personel.Password == hashedPassword) // Şifre kontrolü
                 {
                     // Kullanıcıyı oturum açtırmak için SignInUser metoduna yönlendirme
                     return SignInUser(personel.Id.ToString(), personel.Name, personel.Surname, "Personel");
@@ -138,6 +162,30 @@ namespace SEnerji.Controllers
         [HttpPost]
         public IActionResult SignUp([FromBody]Customer customer)
         {
+
+
+            string ConvertToMD5(string input)
+            {
+                using (var md5 = MD5.Create())
+                {
+                    byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+                    byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                    // Hash'i hex string'e çevir
+                    StringBuilder sb = new StringBuilder();
+                    foreach (byte b in hashBytes)
+                    {
+                        sb.Append(b.ToString("x2"));
+                    }
+                    return sb.ToString();
+                }
+            }
+
+
+            var hashedPass = ConvertToMD5(customer.Password);
+
+
+
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
@@ -157,6 +205,7 @@ namespace SEnerji.Controllers
 
             // Müşteri statüsünü ve veritabanı işlemlerini tamamlıyoruz
             customer.Status = 1;
+            customer.Password=hashedPass;
             _context.Add(customer);
             _context.SaveChanges();
 

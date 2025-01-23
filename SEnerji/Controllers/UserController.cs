@@ -1,4 +1,5 @@
 ﻿using DataBaseLayer;
+using EntityLayer;
 using EntityLayer.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +62,27 @@ namespace SEnerji.Controllers
 
             // Sonuçları UserDTO modeline göre görüntülüyoruz
             return View(userDTO);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateCustomer([FromBody] Customer customer)
+        {
+            var Ucustomer = _context.customers.Where(x => x.Id == customer.Id).FirstOrDefault();
+            if (customer == null)
+            {
+                return BadRequest();
+            }
+            Ucustomer.Name = string.IsNullOrWhiteSpace(customer.Name) ? Ucustomer.Name : customer.Name;
+            Ucustomer.Surname = string.IsNullOrWhiteSpace(customer.Surname) ? Ucustomer.Surname : customer.Surname;
+            Ucustomer.Email = string.IsNullOrWhiteSpace(customer.Email) ? Ucustomer.Email : customer.Email;
+            Ucustomer.City = string.IsNullOrWhiteSpace(customer.City) ? Ucustomer.City : customer.City;
+            Ucustomer.Birthday = customer.Birthday == default ? Ucustomer.Birthday : customer.Birthday;
+            Ucustomer.Plate = string.IsNullOrWhiteSpace(customer.Plate) ? Ucustomer.Plate : customer.Plate;
+            Ucustomer.Status = 1;
+
+            _context.customers.Update(Ucustomer);
+            _context.SaveChanges();
+            return Ok();
         }
     }
 }
