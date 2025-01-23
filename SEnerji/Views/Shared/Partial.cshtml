@@ -171,6 +171,7 @@
                                 <div>
                                     <h4>${item.AddressInfo.Title}</h4>
                                     <p>${item.AddressInfo.AddressLine1}, ${item.AddressInfo.StateOrProvince || 'Bölge bilgisi yok'}</p>
+                                    <button class="btn btn-primary btn-sm" onclick="showDirections(${item.AddressInfo.Latitude}, ${item.AddressInfo.Longitude})">Yol Tarifi</button>
                                 </div><hr>`;
                         });
                     } else {
@@ -190,4 +191,11 @@
             });
         }
     });
+
+    // Yol tarifi butonuna tıklandığında çalışacak fonksiyon
+    function showDirections(latitude, longitude) {
+        // Yol tarifi sayfasına yönlendirme yapılırken koordinatları query string olarak ekleyin
+        window.location.href = `/Directions?lat=${latitude}&lng=${longitude}`;
+    }
 </script>
+

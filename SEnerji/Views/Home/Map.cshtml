@@ -1,0 +1,115 @@
+﻿<!-- Harita için bir div ekleyelim -->
+<div id="map" style="height: 500px; width: 100%;"></div>
+
+<!-- Leaflet.js kütüphanesini ve harita stilini dahil ediyoruz -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- Leaflet Routing Machine kütüphanesini dahil ediyoruz -->
+<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+<script>
+    // Harita başlatma
+    var map = L.map('map').setView([39.9334, 32.8597], 13); // Varsayılan olarak Ankara
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Yol tarifi için bir değişken tanımlıyoruz
+    var routeControl;
+
+    // Kullanıcı tıkladığında yol tarifi göster
+    function showRoute(fromLat, fromLng, toLat, toLng) {
+        if (routeControl) {
+            map.removeControl(routeControl); // Önceki rotayı temizle
+        }
+
+        // Başlangıç ve varış noktası arasında yol tarifi göster
+        routeControl = L.Routing.control({
+            waypoints: [
+                L.latLng(fromLat, fromLng),  // Başlangıç noktası
+                L.latLng(toLat, toLng)       // Varış noktası
+            ],
+            routeWhileDragging: true
+        }).addTo(map);
+    }
+
+    // Kullanıcının konumunu alalım (HTML5 Geolocation API)
+    function getUserLocation(callback) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var userLocation = [position.coords.latitude, position.coords.longitude];
+                callback(userLocation);
+            }, function (error) {
+                alert('Konum alınırken bir hata oluştu: ' + error.message);
+                // Varsayılan bir konum kullanılabilir
+                callback([39.9334, 32.8597]); // Ankara
+            });
+        } else {
+            alert("Geolocation desteği bulunmuyor.");
+            callback([39.9334, 32.8597]); // Varsayılan konum
+        }
+    }
+
+    // Arama sonuçlarına tıklama işlevi ekleyelim
+    $(document).on('click', '.getRouteBtn', function () {
+        var station = $(this).data('station'); // HTML'den istasyonu al
+        var stationLat = station.AddressInfo.Latitude;  // İstasyonun enlem bilgisi
+        var stationLng = station.AddressInfo.Longitude; // İstasyonun boylam bilgisi
+
+        // Kullanıcının konumunu alalım ve yol tarifini göster
+        getUserLocation(function (userLocation) {
+            showRoute(userLocation[0], userLocation[1], stationLat, stationLng);
+        });
+    });
+
+    // İstasyonları listeleme fonksiyonu
+    function listStations(stateOrProvince = '', clearPrevious = false) {
+        $.ajax({
+            url: `https://api.openchargemap.io/v3/poi`,
+            type: 'GET',
+            data: {
+                key: '1cff6936-69cb-4e68-80df-d479970e9251', // OpenChargeMap API anahtarınız
+                countrycode: 'TR', // Türkiye için
+                'address.stateorprovince': encodeURIComponent(stateOrProvince)
+            },
+            success: function (response) {
+                var resultsHtml = '';
+                var filteredResults = response;
+
+                if (stateOrProvince) {
+                    filteredResults = response.filter(function (item) {
+                        return item.AddressInfo.StateOrProvince &&
+                            item.AddressInfo.StateOrProvince.trim().toLowerCase() === stateOrProvince.trim().toLowerCase();
+                    });
+                }
+
+                if (filteredResults.length > 0) {
+                    filteredResults.forEach(function (item) {
+                        resultsHtml += `
+                                <div>
+                                    <h4>${item.AddressInfo.Title}</h4>
+                                    <p>${item.AddressInfo.AddressLine1}, ${item.AddressInfo.StateOrProvince || 'Bölge bilgisi yok'}</p>
+                                    <button class="btn btn-primary getRouteBtn" data-station='${JSON.stringify(item)}'>Yol Tarifi Al</button>
+                                </div><hr>`;
+                    });
+                } else {
+                    resultsHtml = '<p>Sonuç bulunamadı.</p>';
+                }
+
+                if (clearPrevious) {
+                    $('#searchResults').html(resultsHtml);
+                } else {
+                    $('#searchResults').append(resultsHtml);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("API Hatası:", status, error);
+                $('#searchResults').html('<p>API isteği sırasında bir hata oluştu.</p>');
+            }
+        });
+    }
+
+    // Sayfa yüklendiğinde tüm istasyonları listele
+    listStations();
+</script>

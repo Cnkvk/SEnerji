@@ -91,7 +91,6 @@
         var markers = @Html.Raw(ViewData["Markers"]);
 
         // Harita başlatma
-        // var map = L.map('dvMap').setView([markers[0].Latitude, markers[0].Longitude], 6);
         var map = L.map('dvMap').setView([39.0, 35.0], 6);
 
         // OpenStreetMap tile'larını ekliyoruz
@@ -107,12 +106,56 @@
             popupAnchor: [0, -32]  // Popup pozisyonu
         });
 
-        // Model'den gelen her bir şarj istasyonunu haritada işaretliyoruz
         markers.forEach(function (item) {
-            L.marker([item.Latitude, item.Longitude], { icon: myIcon })  // Özel ikonu marker'a ekliyoruz
+            L.marker([item.Latitude, item.Longitude], { icon: myIcon })
                 .bindPopup("<b>" + item.Title + "</b><br />" + item.AddressLine1 + " " + item.AddressLine2 + ", " + item.Town + ", " + item.StateOrProvince)
                 .addTo(map);
         });
+
+        // Kullanıcının konumunu almak için fonksiyon
+        function getUserLocation(callback) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var userLocation = [position.coords.latitude, position.coords.longitude];
+                    callback(userLocation);
+                }, function (error) {
+                    alert('Konum alınırken bir hata oluştu: ' + error.message);
+                    callback([39.9334, 32.8597]); // Varsayılan konum (Ankara)
+                });
+            } else {
+                alert("Tarayıcınız konum bilgisini desteklemiyor.");
+                callback([39.9334, 32.8597]); // Varsayılan konum (Ankara)
+            }
+        }
+
+        // Kullanıcı konumu için ikon
+        var userIcon = L.icon({
+            iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png', // Varsayılan ikon
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34]
+        });
+
+        // Haritanın sağ alt köşesine "Konumumu Göster" butonu ekle
+        L.Control.LocationButton = L.Control.extend({
+            onAdd: function (map) {
+                var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+                container.innerHTML = '<button style="background-color: white; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px; padding: 5px; cursor: pointer;">📍 Konumumu Göster</button>';
+                container.onclick = function () {
+                    getUserLocation(function (userLocation) {
+                        map.setView(userLocation, 13); // Haritayı kullanıcının konumuna odakla
+                        L.marker(userLocation, { icon: userIcon })
+                            .addTo(map)
+                            .bindPopup("Sizin Konumunuz")
+                            .openPopup();
+                    });
+                };
+                return container;
+            }
+        });
+
+        // Butonu haritaya ekle
+        new L.Control.LocationButton().addTo(map);
     };
 </script>
 
@@ -277,7 +320,7 @@
                     </span>
                 </div>
                 <div class="mb-0">
-                    <label class="form-label">Example</label>
+                    <label class="form-label">Şarj Değerleri</label>
                     <div id="kt_slider_basic"></div>
 
                     <div class="pt-5">
@@ -410,6 +453,41 @@
         // Sonuçları ekranda göster
         document.getElementById('chargeTimeResult').textContent = hours + " saat " + minutesFormatted + " dakika";
         document.getElementById('priceResult').textContent = totalPrice.toFixed(2) + " TL";
+    });
+
+    // Kullanıcının konumunu alalım (HTML5 Geolocation API)
+    function getUserLocation(callback) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var userLocation = [position.coords.latitude, position.coords.longitude];
+                callback(userLocation);
+            }, function (error) {
+                alert('Konum alınırken bir hata oluştu: ' + error.message);
+                // Varsayılan bir konum kullanılabilir
+                callback([39.9334, 32.8597]); // Ankara
+            });
+        } else {
+            alert("Geolocation desteği bulunmuyor.");
+            callback([39.9334, 32.8597]); // Varsayılan konum
+        }
+    }
+
+    // Haritanın sağ alt köşesine "Konumumu Göster" butonu ekle
+    L.Control.LocationButton = L.Control.extend({
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+            container.innerHTML = '<button style="background-color: white; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px; padding: 5px; cursor: pointer;">📍 Konumumu Göster</button>';
+            container.onclick = function () {
+                getUserLocation(function (userLocation) {
+                    map.setView(userLocation, 13); // Haritayı kullanıcının konumuna odakla
+                    L.marker(userLocation, { icon: userIcon })
+                        .addTo(map)
+                        .bindPopup("Sizin Konumunuz")
+                        .openPopup();
+                });
+            };
+            return container;
+        }
     });
 </script>
 
