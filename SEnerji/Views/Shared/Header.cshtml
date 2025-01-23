@@ -142,7 +142,28 @@
                             </a>
                         </div>
                         <!--end::Menu item-->
-                       
+                        <div class="menu-item px-5">
+                            @{
+                                var userRole = Context.User.Claims.FirstOrDefault(f => f.Type == "Rol")?.Value;
+                            }
+
+                            <!-- Personel ise bu alanı göster -->
+                            @if (userRole == "Personel")
+                            {
+                                <div class="sub-menu">
+                                    <div class="menu-item px-5">
+                                        <a href="/Customer" class="menu-link px-5">
+                                            Müşteri Bilgileri
+                                        </a>
+                                    </div>
+                                    <div class="menu-item px-5">
+                                        <a href="/Personel" class="menu-link px-5">
+                                            Personel Bilgileri
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
                        
                         <!--begin::Menu separator-->
                         <div class="separator my-2"></div>
@@ -152,11 +173,11 @@
                         
                         <!--end::Menu item-->
                         <!--begin::Menu item-->
-                        <div class="menu-item px-5 my-1">
+                      @*   <div class="menu-item px-5 my-1">
                             <a href="/Login/NewPassword" class="menu-link px-5">
                                 Hesap Ayarları
                             </a>
-                        </div>
+                        </div> *@
                         <!--end::Menu item-->
                         <!--begin::Menu item-->
                         <div class="menu-item px-5">

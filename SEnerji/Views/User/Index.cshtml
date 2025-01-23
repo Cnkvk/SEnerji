@@ -101,7 +101,7 @@
             <!--end::Label-->
             <!--begin::Col-->
             <div class="col-lg-8 fv-row">
-                <span class="fw-semibold text-gray-800 fs-6">@Model.Identity</span>
+                    <span class="fw-semibold text-gray-800 fs-6">@MaskString(Model.Identity)</span>
             </div>
             <!--end::Col-->
         </div>
@@ -167,3 +167,17 @@
     <!--end::Card body-->
 </div>
 </div>
+
+@functions {
+    public string MaskString(string input)
+    {
+        if (input.Length <= 4)
+            return input;
+
+        var start = input.Substring(0, 2);
+        var end = input.Substring(input.Length - 2, 2);
+        var maskedPart = new string('*', input.Length - 4);
+
+        return start + maskedPart + end;
+    }
+  }
